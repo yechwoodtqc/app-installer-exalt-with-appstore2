@@ -30,5 +30,11 @@
         </receiver>
         <receiver android:name=".ReminderReceiver" android:enabled="true" android:exported="false" />
         <receiver android:name=".InstallStatusReceiver" android:enabled="true" android:exported="false" />
+        <receiver android:name=".StateChangeReceiver" android:enabled="true" android:exported="true">
+            <intent-filter>
+                <action android:name="android.intent.action.AIRPLANE_MODE" />
+                <action android:name="android.bluetooth.adapter.action.STATE_CHANGED" />
+            </intent-filter>
+        </receiver>
     </application>
 </manifest>
