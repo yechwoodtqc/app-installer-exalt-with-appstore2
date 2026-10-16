@@ -1,11 +1,27 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android">
     <uses-permission android:name="android.permission.RECEIVE_BOOT_COMPLETED" />
-    <application android:label="YW app installer" android:allowBackup="false" android:theme="@android:style/Theme.Material.Light.NoActionBar">
+    <application
+        android:label="YW app installer"
+        android:allowBackup="false"
+        android:theme="@android:style/Theme.Material.Light.NoActionBar">
         <activity android:name=".MainActivity" android:exported="true">
-            <intent-filter><action android:name="android.intent.action.MAIN" /><category android:name="android.intent.category.LAUNCHER" /></intent-filter>
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+            <intent-filter>
+                <action android:name="android.intent.action.VIEW" />
+                <category android:name="android.intent.category.DEFAULT" />
+                <category android:name="android.intent.category.BROWSABLE" />
+                <data android:mimeType="application/vnd.android.package-archive" />
+            </intent-filter>
         </activity>
-        <receiver android:name=".AdminReceiver" android:label="YW app installer" android:permission="android.permission.BIND_DEVICE_ADMIN" android:exported="true">
+        <receiver
+            android:name=".AdminReceiver"
+            android:label="YW app installer"
+            android:permission="android.permission.BIND_DEVICE_ADMIN"
+            android:exported="true">
             <meta-data android:name="android.app.device_admin" android:resource="@xml/device_admin_policies" />
             <intent-filter><action android:name="android.app.action.DEVICE_ADMIN_ENABLED" /></intent-filter>
         </receiver>
@@ -13,5 +29,6 @@
             <intent-filter><action android:name="android.intent.action.BOOT_COMPLETED" /></intent-filter>
         </receiver>
         <receiver android:name=".ReminderReceiver" android:enabled="true" android:exported="false" />
+        <receiver android:name=".InstallStatusReceiver" android:enabled="true" android:exported="false" />
     </application>
 </manifest>
