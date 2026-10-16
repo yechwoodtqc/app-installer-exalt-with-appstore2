@@ -16,6 +16,7 @@ public class MainActivity extends Activity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        ReminderReceiver.scheduleNext(this);
         TextView message = new TextView(this);
         message.setPadding(24, 24, 24, 24);
         message.setText("YW app installer\n\nOpen an APK file with this app to start an Android PackageInstaller session. Android may ask you to confirm the installation.\n\nThe device-admin reminder opens the separate system confirmation screen directly.");
