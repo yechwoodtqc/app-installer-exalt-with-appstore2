@@ -10,7 +10,7 @@
 - Opening an APK with this app creates and commits an Android `PackageInstaller` session. Android's PackageInstaller sees this app as the session creator/installer package; the app cannot silently bypass Android's user confirmation.
 - If Android requires user action to complete an install, the app posts a notification that opens Android's install confirmation.
 - A separate reminder notification has an **Activate device admin** action that opens Android's official `DevicePolicyManager.ACTION_ADD_DEVICE_ADMIN` confirmation directly. It does not target the app's main activity.
-- The reminder is scheduled for 9:00 AM local time by the boot receiver and reschedules daily.
+- The reminder is scheduled to repeat every 60 seconds after the app has run or the boot receiver has run. Android may delay alarms during Doze or under device-specific battery restrictions.
 
 ## Android limitations
 
