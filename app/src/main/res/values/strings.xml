@@ -1,0 +1,4 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="admin_description">Device administrator permission used by YW app installer.</string>
+</resources>
