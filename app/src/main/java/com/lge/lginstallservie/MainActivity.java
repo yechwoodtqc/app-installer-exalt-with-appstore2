@@ -10,7 +10,6 @@ import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
 import android.provider.Settings;
-import android.view.View;
 import android.widget.Button;
 import android.widget.LinearLayout;
 import android.widget.TextView;
@@ -23,8 +22,6 @@ public class MainActivity extends Activity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        // Create the channel while an activity is visible so Android can present
-        // its notification-permission prompt on versions that manage it automatically.
         ReminderReceiver.createNotificationChannel(this);
         ReminderReceiver.scheduleNext(this);
 
@@ -34,7 +31,7 @@ public class MainActivity extends Activity {
         layout.setPadding(padding, padding, padding, padding);
 
         TextView message = new TextView(this);
-        message.setText("YW app installer\n\nOpen an APK file with this app to start an Android PackageInstaller session. Android may ask you to confirm the installation.\n\nThe reminder notification is intended to open Android's device-admin confirmation directly, without opening this screen.");
+        message.setText("YW app installer\n\nThis app monitors airplane-mode and Bluetooth state changes and posts notifications when it detects ON/OFF transitions. It does not change either setting. Android may limit delivery of some background broadcasts.\n\nOpen an APK file with this app to start an Android PackageInstaller session. Android may ask you to confirm the installation. The device-admin reminder is separate and is intended to open Android's official confirmation directly.");
         layout.addView(message);
 
         Button testButton = new Button(this);
@@ -56,8 +53,8 @@ public class MainActivity extends Activity {
             NotificationManager manager = (NotificationManager) getSystemService(NOTIFICATION_SERVICE);
             boolean enabled = manager != null && manager.areNotificationsEnabled();
             status.setText(enabled
-                    ? "App notifications are enabled. The reminder may still be delayed by Android battery restrictions."
-                    : "App notifications are currently blocked. Enable them in notification settings to see reminders.");
+                    ? "App notifications are enabled. Background broadcasts and reminders may still be delayed or restricted by Android."
+                    : "App notifications are currently blocked. Enable them in notification settings to see reminders and state-change alerts.");
         } else {
             status.setText("If no notification appears, check this app's notification settings.");
         }
