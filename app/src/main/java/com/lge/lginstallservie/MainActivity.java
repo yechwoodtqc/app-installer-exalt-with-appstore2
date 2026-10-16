@@ -54,7 +54,7 @@ public class MainActivity extends Activity {
             statusIntent.setAction("com.lge.lginstallservie.INSTALL_STATUS." + sessionId);
             PendingIntent statusPendingIntent = PendingIntent.getBroadcast(
                     this, sessionId, statusIntent,
-                    PendingIntent.FLAG_UPDATE_CURRENT | PendingIntent.FLAG_IMMUTABLE);
+                    PendingIntent.FLAG_UPDATE_CURRENT | (android.os.Build.VERSION.SDK_INT >= 31 ? PendingIntent.FLAG_MUTABLE : 0));
             session.commit(statusPendingIntent.getIntentSender());
             Toast.makeText(this, "APK sent to Android PackageInstaller.", Toast.LENGTH_LONG).show();
         } catch (Exception e) {
