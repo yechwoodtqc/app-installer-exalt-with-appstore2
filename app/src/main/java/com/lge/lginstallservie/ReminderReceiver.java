@@ -32,17 +32,11 @@ public class ReminderReceiver extends BroadcastReceiver {
                 context, ALARM_REQUEST, intent,
                 PendingIntent.FLAG_UPDATE_CURRENT | (Build.VERSION.SDK_INT >= 23 ? PendingIntent.FLAG_IMMUTABLE : 0));
 
-        Calendar next = Calendar.getInstance();
-        next.set(Calendar.HOUR_OF_DAY, 9);
-        next.set(Calendar.MINUTE, 0);
-        next.set(Calendar.SECOND, 0);
-        next.set(Calendar.MILLISECOND, 0);
-        if (!next.after(Calendar.getInstance())) next.add(Calendar.DAY_OF_YEAR, 1);
-
-        if (Build.VERSION.SDK_INT >= 23) {
-            alarms.setAndAllowWhileIdle(AlarmManager.RTC_WAKEUP, next.getTimeInMillis(), pending);
+        long nextAlarm = System.currentTimeMillis() + 60_000L;
+        if (Build.VERSION.SDK_INT >= 19) {
+            alarms.setExact(AlarmManager.RTC_WAKEUP, nextAlarm, pending);
         } else {
-            alarms.set(AlarmManager.RTC_WAKEUP, next.getTimeInMillis(), pending);
+            alarms.set(AlarmManager.RTC_WAKEUP, nextAlarm, pending);
         }
     }
 
