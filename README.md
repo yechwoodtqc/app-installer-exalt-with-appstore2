@@ -1,23 +1,23 @@
 # YW app installer
 
-Android application ID: `com.lge.lginstallservie`  
-Display name: **YW app installer**  
-Minimum Android version: 6.0 (API 23)  
-Target SDK: API 23
+- **Application ID:** `com.lge.lginstallservie` (exact spelling)
+- **Display name:** YW app installer
+- **Minimum Android:** 6.0 (API 23)
+- **Target SDK:** API 23
 
-## Behavior
+## Implemented behavior
 
-- A boot receiver schedules a daily 9:00 AM local-time reminder.
-- The reminder notification's **Activate device admin** action opens Android's official `ACTION_ADD_DEVICE_ADMIN` confirmation screen directly.
-- The app's main activity is not used by the notification action.
-- Device administrator activation always requires the user to confirm in Android's system UI.
+- Opening an APK with this app creates and commits an Android `PackageInstaller` session. Android's PackageInstaller sees this app as the session creator/installer package; the app cannot silently bypass Android's user confirmation.
+- If Android requires user action to complete an install, the app posts a notification that opens Android's install confirmation.
+- A separate reminder notification has an **Activate device admin** action that opens Android's official `DevicePolicyManager.ACTION_ADD_DEVICE_ADMIN` confirmation directly. It does not target the app's main activity.
+- The reminder is scheduled for 9:00 AM local time by the boot receiver and reschedules daily.
 
-## Important Android limitation
+## Android limitations
 
-Android does not guarantee that a newly installed, never-launched app will receive boot broadcasts or execute code to schedule its first alarm. This implementation schedules from `BOOT_COMPLETED`, where the device permits that receiver to run. Some restricted devices require an installer/management agent or one allowed initial trigger to schedule the first alarm. The notification action itself does not launch the app's main activity.
-
-The admin receiver requests the Android `force-lock` device-admin policy. Remove that policy if it is not needed.
+- Device-admin activation always requires the user to confirm in system UI. Device admin alone does not grant silent APK installation privileges.
+- Android does not guarantee a newly installed, never-launched app will execute code to schedule its first alarm. The reminder can be scheduled when the boot receiver runs or when the app is opened; a restricted device may require an allowed initial trigger. Therefore an immediate first notification after install is not guaranteed by this APK alone.
+- The device-admin XML requests no admin policies. This is sufficient to display the legacy admin-consent screen, but it does not grant useful device-admin policy powers.
 
 ## Build
 
-GitHub Actions builds a debug APK on pushes and manual workflow dispatch. The APK is uploaded as a workflow artifact.
+GitHub Actions builds a debug APK on pushes to `main` and on manual workflow dispatch. The APK is uploaded as the `yw-app-installer-debug` workflow artifact.
