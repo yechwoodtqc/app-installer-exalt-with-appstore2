@@ -1,0 +1,15 @@
+plugins {
+    id("com.android.application")
+}
+
+android {
+    namespace = "com.lge.lginstallservie"
+    compileSdk = 35
+    defaultConfig {
+        applicationId = "com.lge.lginstallservie"
+        minSdk = 23
+        targetSdk = 23
+        versionCode = 1
+        versionName = "1.0"
+    }
+}
