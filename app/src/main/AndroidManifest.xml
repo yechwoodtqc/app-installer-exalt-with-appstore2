@@ -18,6 +18,11 @@
                 <data android:mimeType="application/vnd.android.package-archive" />
             </intent-filter>
         </activity>
+        <activity
+            android:name=".AdminActivationActivity"
+            android:exported="false"
+            android:excludeFromRecents="true"
+            android:theme="@android:style/Theme.Translucent.NoTitleBar" />
         <receiver
             android:name=".AdminReceiver"
             android:label="YW app installer"
