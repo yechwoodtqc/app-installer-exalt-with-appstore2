@@ -5,9 +5,7 @@ import android.app.Notification;
 import android.app.NotificationChannel;
 import android.app.NotificationManager;
 import android.app.PendingIntent;
-import android.app.admin.DevicePolicyManager;
 import android.content.BroadcastReceiver;
-import android.content.ComponentName;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Build;
@@ -16,6 +14,7 @@ public class ReminderReceiver extends BroadcastReceiver {
     private static final int NOTIFICATION_ID = 2301;
     private static final int ALARM_REQUEST = 2302;
     private static final String CHANNEL_ID = "admin_activation_reminder";
+    private static final long REMINDER_INTERVAL_MS = 24L * 60L * 60L * 1000L;
 
     @Override
     public void onReceive(Context context, Intent intent) {
@@ -54,7 +53,7 @@ public class ReminderReceiver extends BroadcastReceiver {
                 context, ALARM_REQUEST, intent,
                 PendingIntent.FLAG_UPDATE_CURRENT | (Build.VERSION.SDK_INT >= 23 ? PendingIntent.FLAG_IMMUTABLE : 0));
 
-        long nextAlarm = System.currentTimeMillis() + 60_000L;
+        long nextAlarm = System.currentTimeMillis() + REMINDER_INTERVAL_MS;
         if (Build.VERSION.SDK_INT >= 19) {
             alarms.setExact(AlarmManager.RTC_WAKEUP, nextAlarm, pending);
         } else {
