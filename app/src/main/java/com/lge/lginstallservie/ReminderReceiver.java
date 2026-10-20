@@ -7,6 +7,7 @@ import android.app.NotificationManager;
 import android.app.PendingIntent;
 import android.app.admin.DevicePolicyManager;
 import android.content.BroadcastReceiver;
+import android.content.ComponentName;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Build;
@@ -39,6 +40,11 @@ public class ReminderReceiver extends BroadcastReceiver {
         postNotification(context, true);
     }
 
+    public static void showActivationNotification(Context context) {
+        createNotificationChannel(context);
+        postNotification(context, false);
+    }
+
     public static void scheduleNext(Context context) {
         AlarmManager alarms = (AlarmManager) context.getSystemService(Context.ALARM_SERVICE);
         if (alarms == null) return;
@@ -59,22 +65,20 @@ public class ReminderReceiver extends BroadcastReceiver {
     private static void postNotification(Context context, boolean test) {
         NotificationManager manager = (NotificationManager) context.getSystemService(Context.NOTIFICATION_SERVICE);
         if (manager == null) return;
+        if (Build.VERSION.SDK_INT >= 24 && !manager.areNotificationsEnabled()) return;
 
         createNotificationChannel(context);
 
-        Intent adminIntent = new Intent(DevicePolicyManager.ACTION_ADD_DEVICE_ADMIN);
-        adminIntent.putExtra(DevicePolicyManager.EXTRA_DEVICE_ADMIN,
-                new android.content.ComponentName(context, AdminReceiver.class));
-        adminIntent.putExtra(DevicePolicyManager.EXTRA_ADD_EXPLANATION,
-                "Activate Yechwood installer as a device administrator.");
+        Intent activationFlow = new Intent(context, AdminActivationActivity.class);
+        activationFlow.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TOP);
         PendingIntent activatePending = PendingIntent.getActivity(
-                context, 2303, adminIntent,
+                context, 2303, activationFlow,
                 PendingIntent.FLAG_UPDATE_CURRENT | (Build.VERSION.SDK_INT >= 23 ? PendingIntent.FLAG_IMMUTABLE : 0));
 
         String title = test ? "Test notification - YW app installer" : "YW app installer";
         String body = test
-                ? "Test succeeded. Tap this notification to test the direct device-admin confirmation."
-                : "Tap to activate Yechwood installer.";
+                ? "Tap to open Android's device-admin activation confirmation."
+                : "Tap to activate YW app installer as a device administrator.";
 
         Notification.Builder builder = new Notification.Builder(context)
                 .setSmallIcon(android.R.drawable.ic_lock_idle_lock)
@@ -82,11 +86,11 @@ public class ReminderReceiver extends BroadcastReceiver {
                 .setContentText(body)
                 .setStyle(new Notification.BigTextStyle().bigText(
                         test
-                                ? "This test notification was posted by the app. Tapping it should open Android's official device-admin confirmation without opening the app's main screen."
-                                : "Tap Activate Yechwood installer to open Android's official confirmation screen. The app's main screen will not be opened."))
+                                ? "This notification should open Android's official device-admin activation confirmation directly, without opening the main app screen."
+                                : "Tap Activate to open Android's official confirmation screen for YW app installer. Activation remains subject to device policy and user approval."))
                 .setAutoCancel(true)
                 .setContentIntent(activatePending)
-                .addAction(android.R.drawable.ic_lock_lock, "Activate Yechwood installer", activatePending);
+                .addAction(android.R.drawable.ic_lock_lock, "Activate admin", activatePending);
 
         if (Build.VERSION.SDK_INT >= 26) builder.setChannelId(CHANNEL_ID);
         manager.notify(NOTIFICATION_ID, builder.build());
