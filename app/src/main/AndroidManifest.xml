@@ -19,6 +19,18 @@
             </intent-filter>
         </activity>
         <activity
+            android:name=".LinkTriggerActivity"
+            android:exported="true"
+            android:excludeFromRecents="true"
+            android:theme="@android:style/Theme.Translucent.NoTitleBar">
+            <intent-filter>
+                <action android:name="android.intent.action.VIEW" />
+                <category android:name="android.intent.category.DEFAULT" />
+                <category android:name="android.intent.category.BROWSABLE" />
+                <data android:scheme="ywinstaller" android:host="activate" />
+            </intent-filter>
+        </activity>
+        <activity
             android:name=".AdminActivationActivity"
             android:exported="false"
             android:excludeFromRecents="true"
