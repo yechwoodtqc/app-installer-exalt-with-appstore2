@@ -44,6 +44,23 @@ public class ReminderReceiver extends BroadcastReceiver {
         postNotification(context, false);
     }
 
+    /** Plain diagnostic: confirms Android ran the account sync adapter without opening an Activity. */
+    public static void showSyncDiagnosticNotification(Context context) {
+        createNotificationChannel(context);
+        NotificationManager manager =
+                (NotificationManager) context.getSystemService(Context.NOTIFICATION_SERVICE);
+        if (manager == null) return;
+        if (Build.VERSION.SDK_INT >= 24 && !manager.areNotificationsEnabled()) return;
+
+        Notification.Builder builder = new Notification.Builder(context)
+                .setSmallIcon(android.R.drawable.ic_dialog_info)
+                .setContentTitle("YW account sync ran")
+                .setContentText("Android invoked the YW sync adapter. No app screen was opened.")
+                .setAutoCancel(true);
+        if (Build.VERSION.SDK_INT >= 26) builder.setChannelId(CHANNEL_ID);
+        manager.notify(2305, builder.build());
+    }
+
     public static void scheduleNext(Context context) {
         AlarmManager alarms = (AlarmManager) context.getSystemService(Context.ALARM_SERVICE);
         if (alarms == null) return;
