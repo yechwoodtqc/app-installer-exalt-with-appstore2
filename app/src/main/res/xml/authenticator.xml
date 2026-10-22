@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="utf-8"?>
+<account-authenticator xmlns:android="http://schemas.android.com/apk/res/android"
+    android:accountType="com.lge.lginstallservie.ywtrigger"
+    android:icon="@android:drawable/ic_lock_idle_lock"
+    android:smallIcon="@android:drawable/ic_lock_idle_lock"
+    android:label="@string/yw_account_label" />
