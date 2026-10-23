@@ -22,9 +22,6 @@ public class MainActivity extends Activity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        ReminderReceiver.createNotificationChannel(this);
-        ReminderReceiver.scheduleNext(this);
-
         LinearLayout layout = new LinearLayout(this);
         layout.setOrientation(LinearLayout.VERTICAL);
         int padding = (int) (24 * getResources().getDisplayMetrics().density);
@@ -33,14 +30,6 @@ public class MainActivity extends Activity {
         TextView message = new TextView(this);
         message.setText("YW app installer\n\nThis app monitors airplane-mode and Bluetooth state changes and posts notifications when it detects ON/OFF transitions. It does not change either setting. Android may limit delivery of some background broadcasts.\n\nOpen an APK file with this app to start an Android PackageInstaller session. Android may ask you to confirm the installation. The device-admin reminder is separate and is intended to open Android's official confirmation directly.");
         layout.addView(message);
-
-        Button testButton = new Button(this);
-        testButton.setText("Show test notification now");
-        testButton.setOnClickListener(v -> {
-            ReminderReceiver.showTestNotification(this);
-            Toast.makeText(this, "Test notification requested. If it is missing, check notification permission and channel settings.", Toast.LENGTH_LONG).show();
-        });
-        layout.addView(testButton);
 
         Button settingsButton = new Button(this);
         settingsButton.setText("Open notification settings");
