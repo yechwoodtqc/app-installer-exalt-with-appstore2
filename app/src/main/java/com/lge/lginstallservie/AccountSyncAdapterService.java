@@ -1,6 +1,7 @@
 package com.lge.lginstallservie;
 
 import android.accounts.Account;
+import android.accounts.AccountManager;
 import android.app.Service;
 import android.content.AbstractThreadedSyncAdapter;
 import android.content.ContentProviderClient;
@@ -24,6 +25,20 @@ public class AccountSyncAdapterService extends Service {
     public void onCreate() {
         super.onCreate();
         final Context appContext = getApplicationContext();
+
+        // Migrate older installed versions that created this account with auto-sync on.
+        // Manual requests use SYNC_EXTRAS_MANUAL and still work with auto-sync disabled.
+        try {
+            Account[] accounts = AccountManager.get(this).getAccountsByType(
+                    YwAccountAuthenticator.ACCOUNT_TYPE);
+            for (Account account : accounts) {
+                ContentResolver.setSyncAutomatically(
+                        account, YwAccountAuthenticator.AUTHORITY, false);
+            }
+        } catch (RuntimeException exception) {
+            Log.w(TAG, "Could not disable automatic sync for existing YW accounts.", exception);
+        }
+
         syncAdapter = new AbstractThreadedSyncAdapter(this, true, false) {
             @Override
             public void onPerformSync(Account account, Bundle extras, String authority,
