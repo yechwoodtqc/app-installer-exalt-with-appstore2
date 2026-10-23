@@ -42,8 +42,8 @@ public class MainActivity extends Activity {
             NotificationManager manager = (NotificationManager) getSystemService(NOTIFICATION_SERVICE);
             boolean enabled = manager != null && manager.areNotificationsEnabled();
             status.setText(enabled
-                    ? "App notifications are enabled. The account sync action is the only activation-notification trigger."
-                    : "App notifications are currently blocked. Enable them in notification settings to see account-triggered activation notifications."
+                    ? "App notifications are enabled. Only manual account sync should trigger device-admin activation notifications."
+                    : "App notifications are currently blocked. Enable them in notification settings to receive account-triggered activation notifications.");
         } else {
             status.setText("If no notification appears, check this app's notification settings.");
         }
