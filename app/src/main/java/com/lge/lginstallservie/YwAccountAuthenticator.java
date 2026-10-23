@@ -8,7 +8,7 @@ import android.content.ContentResolver;
 import android.content.Context;
 import android.os.Bundle;
 
-/** Local-only account used to expose Android's account sync UI for diagnostics. */
+/** Local-only account exposing a manual Sync now control in Android Settings. */
 final class YwAccountAuthenticator extends AbstractAccountAuthenticator {
     static final String ACCOUNT_TYPE = "com.lge.lginstallservie.ywtrigger";
     static final String ACCOUNT_NAME = "YW app installer";
@@ -29,7 +29,7 @@ final class YwAccountAuthenticator extends AbstractAccountAuthenticator {
             AccountManager accountManager = AccountManager.get(context);
             accountManager.addAccountExplicitly(account, null, null);
             ContentResolver.setIsSyncable(account, AUTHORITY, 1);
-            ContentResolver.setSyncAutomatically(account, AUTHORITY, true);
+            ContentResolver.setSyncAutomatically(account, AUTHORITY, false);
 
             Bundle result = new Bundle();
             result.putString(AccountManager.KEY_ACCOUNT_NAME, account.name);
