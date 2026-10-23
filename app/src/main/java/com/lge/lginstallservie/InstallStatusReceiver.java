@@ -55,5 +55,11 @@ public class InstallStatusReceiver extends BroadcastReceiver {
         if (Build.VERSION.SDK_INT >= 26) builder.setChannelId(CHANNEL_ID);
         if (contentIntent != null) builder.setContentIntent(contentIntent);
         manager.notify(NOTIFICATION_ID, builder.build());
+        String packageName = intent.getStringExtra("yw_package_name");
+        String version = intent.getStringExtra("yw_version");
+        if (packageName != null && packageName.length() > 0) {
+            StoreReporter.report(context.getApplicationContext(), packageName, version == null ? "" : version,
+                    status == PackageInstaller.STATUS_SUCCESS ? "installed" : "failed");
+        }
     }
 }

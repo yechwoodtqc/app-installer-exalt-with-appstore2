@@ -81,3 +81,10 @@ If the notification appears but tapping **Activate admin** does nothing:
 ## Build
 
 GitHub Actions builds a debug APK on pushes to `main` and on manual workflow dispatch. The artifact is named `yw-app-installer-debug`.
+
+
+## App-store development additions
+
+The app now includes the first Android client flow for one-time authorization, an authorized remote catalog, Wi-Fi-only downloads by default with an opt-in mobile-data setting, Android PackageInstaller handoff, a Livigent/device-admin settings warning, and best-effort download/install reporting. The Worker and D1 schema are in `backend/`.
+
+**Not ready to distribute yet:** deploy the Worker/D1 backend, set `ApiConfig.BASE_URL` to its HTTPS URL, publish APK URLs/catalog entries, and run the build/test checklist in `backend/README.md`. Android icon rendering from `iconUrl`, reliable package/version verification after install, and real-device testing on LG Exalt / LG125DL remain to be completed.

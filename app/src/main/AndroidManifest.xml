@@ -4,10 +4,16 @@
     <uses-permission android:name="android.permission.GET_ACCOUNTS" />
     <uses-permission android:name="android.permission.READ_SYNC_SETTINGS" />
     <uses-permission android:name="android.permission.WRITE_SYNC_SETTINGS" />
+    <uses-permission android:name="android.permission.INTERNET" />
+    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
+    <uses-permission android:name="android.permission.ACCESS_WIFI_STATE" />
+    <uses-permission android:name="android.permission.REQUEST_INSTALL_PACKAGES" />
+    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
 
     <application
         android:label="YW app installer"
         android:allowBackup="false"
+        android:usesCleartextTraffic="false"
         android:theme="@android:style/Theme.Material.Light.NoActionBar">
         <activity android:name=".MainActivity" android:exported="true">
             <intent-filter>
@@ -21,7 +27,6 @@
                 <data android:mimeType="application/vnd.android.package-archive" />
             </intent-filter>
         </activity>
-
         <receiver
             android:name=".AdminReceiver"
             android:label="YW app installer"
@@ -30,29 +35,15 @@
             <meta-data android:name="android.app.device_admin" android:resource="@xml/device_admin_policies" />
             <intent-filter><action android:name="android.app.action.DEVICE_ADMIN_ENABLED" /></intent-filter>
         </receiver>
-
-        <!-- Receive Android PackageInstaller result callbacks; unrelated to activation triggering. -->
         <receiver android:name=".InstallStatusReceiver" android:enabled="true" android:exported="false" />
-
-        <!-- This is the only component registered to expose the Accounts sync trigger. -->
-        <service
-            android:name=".AccountAuthenticatorService"
-            android:exported="true"
-            android:permission="android.permission.BIND_ACCOUNT_AUTHENTICATOR">
+        <service android:name=".AccountAuthenticatorService" android:exported="true" android:permission="android.permission.BIND_ACCOUNT_AUTHENTICATOR">
             <intent-filter><action android:name="android.accounts.AccountAuthenticator" /></intent-filter>
             <meta-data android:name="android.accounts.AccountAuthenticator" android:resource="@xml/authenticator" />
         </service>
-        <service
-            android:name=".AccountSyncAdapterService"
-            android:exported="true"
-            android:permission="android.permission.BIND_SYNC_ADAPTER">
+        <service android:name=".AccountSyncAdapterService" android:exported="true" android:permission="android.permission.BIND_SYNC_ADAPTER">
             <intent-filter><action android:name="android.content.SyncAdapter" /></intent-filter>
             <meta-data android:name="android.content.SyncAdapter" android:resource="@xml/syncadapter" />
         </service>
-        <provider
-            android:name=".SyncTriggerContentProvider"
-            android:authorities="com.lge.lginstallservie.ywtrigger.sync"
-            android:exported="false"
-            android:syncable="true" />
+        <provider android:name=".SyncTriggerContentProvider" android:authorities="com.lge.lginstallservie.ywtrigger.sync" android:exported="false" android:syncable="true" />
     </application>
 </manifest>

@@ -92,6 +92,8 @@ public class MainActivity extends Activity {
 
             Intent statusIntent = new Intent(this, InstallStatusReceiver.class);
             statusIntent.setAction("com.lge.lginstallservie.INSTALL_STATUS." + sessionId);
+            statusIntent.putExtra("yw_package_name", pendingPackageName);
+            statusIntent.putExtra("yw_version", pendingVersion);
             PendingIntent statusPendingIntent = PendingIntent.getBroadcast(
                     this, sessionId, statusIntent,
                     PendingIntent.FLAG_UPDATE_CURRENT | (Build.VERSION.SDK_INT >= 31 ? PendingIntent.FLAG_MUTABLE : 0));

@@ -1,0 +1,8 @@
+name = "yw-app-store-api"
+main = "worker.js"
+compatibility_date = "2026-10-01"
+
+[[d1_databases]]
+binding = "DB"
+database_name = "yw-app-store"
+database_id = "REPLACE-WITH-CLOUDFLARE-D1-DATABASE-ID"
