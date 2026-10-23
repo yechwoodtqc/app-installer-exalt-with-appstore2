@@ -1,8 +1,8 @@
-val storeApiBaseUrl = System.getenv("STORE_API_BASE_URL") ?: "https://REPLACE-WITH-YOUR-WORKER.workers.dev"
-
 plugins {
     id("com.android.application")
 }
+
+val storeApiBaseUrl = System.getenv("STORE_API_BASE_URL") ?: "https://REPLACE-WITH-YOUR-WORKER.workers.dev"
 
 android {
     namespace = "com.lge.lginstallservie"
