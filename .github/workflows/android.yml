@@ -27,6 +27,8 @@ jobs:
           gradle-version: '8.9'
 
       - name: Build debug APK
+        env:
+          STORE_API_BASE_URL: ${{ vars.STORE_API_BASE_URL }}
         run: gradle --no-daemon assembleDebug
 
       - name: Upload APK
