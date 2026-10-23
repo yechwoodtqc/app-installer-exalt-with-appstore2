@@ -4,6 +4,7 @@ import android.accounts.Account;
 import android.app.Service;
 import android.content.AbstractThreadedSyncAdapter;
 import android.content.ContentProviderClient;
+import android.content.ContentResolver;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SyncResult;
@@ -11,7 +12,10 @@ import android.os.Bundle;
 import android.os.IBinder;
 import android.util.Log;
 
-/** Invoked by Android's account-sync UI; deliberately does not start an Activity. */
+/**
+ * Only an explicit user-requested sync should post the activation notification.
+ * Automatic and initialization sync callbacks are ignored.
+ */
 public class AccountSyncAdapterService extends Service {
     private static final String TAG = "YWAccountSync";
     private AbstractThreadedSyncAdapter syncAdapter;
@@ -24,7 +28,14 @@ public class AccountSyncAdapterService extends Service {
             @Override
             public void onPerformSync(Account account, Bundle extras, String authority,
                     ContentProviderClient provider, SyncResult syncResult) {
-                Log.i(TAG, "Android invoked the YW account sync adapter; posting the existing activation notification.");
+                boolean manual = extras != null
+                        && extras.getBoolean(ContentResolver.SYNC_EXTRAS_MANUAL, false);
+                if (!manual) {
+                    Log.i(TAG, "Ignoring non-manual account sync; no notification triggered.");
+                    return;
+                }
+
+                Log.i(TAG, "Manual account sync requested; posting direct system activation notification.");
                 ActivationNotification.showActivationNotification(appContext);
             }
         };
