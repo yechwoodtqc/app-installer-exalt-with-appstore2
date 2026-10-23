@@ -2,7 +2,7 @@ plugins {
     id 'com.android.application'
 }
 
-def storeApiBaseUrl = System.getenv('STORE_API_BASE_URL') ?: 'https://REPLACE-WITH-YOUR-WORKER.workers.dev'
+def storeApiBaseUrl = System.getenv('STORE_API_BASE_URL') ?: 'https://yw-app-store-api.yw-app-installer-store-2026.workers.dev'
 
 android {
     namespace 'com.lge.lginstallservie'
