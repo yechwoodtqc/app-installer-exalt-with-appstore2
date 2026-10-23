@@ -28,7 +28,7 @@ public class MainActivity extends Activity {
         layout.setPadding(padding, padding, padding, padding);
 
         TextView message = new TextView(this);
-        message.setText("YW app installer\n\nThis app monitors airplane-mode and Bluetooth state changes and posts notifications when it detects ON/OFF transitions. It does not change either setting. Android may limit delivery of some background broadcasts.\n\nOpen an APK file with this app to start an Android PackageInstaller session. Android may ask you to confirm the installation. The device-admin reminder is separate and is intended to open Android's official confirmation directly.");
+        message.setText("YW app installer\n\nThe device-admin activation notification is triggered through Settings > Accounts > YW app installer > Sync now. Its notification action opens Android's system-owned device-admin confirmation directly, without opening a YW Installer Activity first.\n\nOpen an APK file with this app to start an Android PackageInstaller session. Android may ask you to confirm the installation. Package installation and device-admin activation are separate Android system flows.");
         layout.addView(message);
 
         Button settingsButton = new Button(this);
@@ -42,8 +42,8 @@ public class MainActivity extends Activity {
             NotificationManager manager = (NotificationManager) getSystemService(NOTIFICATION_SERVICE);
             boolean enabled = manager != null && manager.areNotificationsEnabled();
             status.setText(enabled
-                    ? "App notifications are enabled. Background broadcasts and reminders may still be delayed or restricted by Android."
-                    : "App notifications are currently blocked. Enable them in notification settings to see reminders and state-change alerts.");
+                    ? "App notifications are enabled. The account sync action is the only activation-notification trigger."
+                    : "App notifications are currently blocked. Enable them in notification settings to see account-triggered activation notifications."
         } else {
             status.setText("If no notification appears, check this app's notification settings.");
         }
