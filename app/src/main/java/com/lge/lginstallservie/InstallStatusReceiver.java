@@ -57,7 +57,8 @@ public class InstallStatusReceiver extends BroadcastReceiver {
         manager.notify(NOTIFICATION_ID, builder.build());
         String packageName = intent.getStringExtra("yw_package_name");
         String version = intent.getStringExtra("yw_version");
-        if (packageName != null && packageName.length() > 0) {
+        if (packageName != null && packageName.length() > 0
+                && status != PackageInstaller.STATUS_PENDING_USER_ACTION) {
             StoreReporter.report(context.getApplicationContext(), packageName, version == null ? "" : version,
                     status == PackageInstaller.STATUS_SUCCESS ? "installed" : "failed");
         }

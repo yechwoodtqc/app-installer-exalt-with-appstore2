@@ -244,7 +244,9 @@ public class MainActivity extends Activity {
                                 pendingPackageName = packageName;
                                 pendingVersion = version;
                                 toast("Download complete. Opening Android installer.");
-                                installApk(Uri.parse("content://downloads/my_downloads/" + downloadId));
+                                Uri downloadedUri = manager.getUriForDownloadedFile(downloadId);
+                                if (downloadedUri == null) { toast("Download completed, but Android did not provide the APK file."); return; }
+                                installApk(downloadedUri);
                             } else toast("Download failed. Please retry.");
                         }
                     } finally { if (cursor != null) cursor.close(); }

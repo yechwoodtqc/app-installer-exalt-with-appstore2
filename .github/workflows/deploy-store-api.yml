@@ -1,0 +1,49 @@
+name: Deploy Store API
+
+on:
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+      - name: Validate Cloudflare settings
+        working-directory: backend
+        env:
+          CLOUDFLARE_ACCOUNT_ID: ${{ vars.CLOUDFLARE_ACCOUNT_ID }}
+          CLOUDFLARE_D1_DATABASE_ID: ${{ vars.CLOUDFLARE_D1_DATABASE_ID }}
+          CLOUDFLARE_API_TOKEN: ${{ secrets.CLOUDFLARE_API_TOKEN }}
+        run: |
+          test -n "$CLOUDFLARE_ACCOUNT_ID" || (echo "Missing repository variable CLOUDFLARE_ACCOUNT_ID" && exit 1)
+          test -n "$CLOUDFLARE_D1_DATABASE_ID" || (echo "Missing repository variable CLOUDFLARE_D1_DATABASE_ID" && exit 1)
+          test -n "$CLOUDFLARE_API_TOKEN" || (echo "Missing repository secret CLOUDFLARE_API_TOKEN" && exit 1)
+          sed -i "s/REPLACE-WITH-CLOUDFLARE-D1-DATABASE-ID/$CLOUDFLARE_D1_DATABASE_ID/" wrangler.toml
+          npm install --global wrangler
+      - name: Apply D1 schema
+        working-directory: backend
+        env:
+          CLOUDFLARE_ACCOUNT_ID: ${{ vars.CLOUDFLARE_ACCOUNT_ID }}
+          CLOUDFLARE_API_TOKEN: ${{ secrets.CLOUDFLARE_API_TOKEN }}
+        run: wrangler d1 execute yw-app-store --remote --file=schema.sql
+      - name: Set API admin secret
+        working-directory: backend
+        env:
+          CLOUDFLARE_ACCOUNT_ID: ${{ vars.CLOUDFLARE_ACCOUNT_ID }}
+          CLOUDFLARE_API_TOKEN: ${{ secrets.CLOUDFLARE_API_TOKEN }}
+          STORE_ADMIN_SECRET: ${{ secrets.STORE_ADMIN_SECRET }}
+        run: |
+          test -n "$STORE_ADMIN_SECRET" || (echo "Missing repository secret STORE_ADMIN_SECRET" && exit 1)
+          printf '%s' "$STORE_ADMIN_SECRET" | wrangler secret put ADMIN_SECRET
+      - name: Deploy Worker
+        working-directory: backend
+        env:
+          CLOUDFLARE_ACCOUNT_ID: ${{ vars.CLOUDFLARE_ACCOUNT_ID }}
+          CLOUDFLARE_API_TOKEN: ${{ secrets.CLOUDFLARE_API_TOKEN }}
+        run: wrangler deploy

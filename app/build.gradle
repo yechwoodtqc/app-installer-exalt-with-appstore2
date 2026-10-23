@@ -9,7 +9,11 @@ android {
         applicationId = "com.lge.lginstallservie"
         minSdk = 23
         targetSdk = 23
-        versionCode = 7
-        versionName = "1.6"
+        versionCode = 8
+        versionName = "1.7"
+        buildConfigField("String", "STORE_API_BASE_URL", "\"\${System.getenv("STORE_API_BASE_URL") ?: "https://REPLACE-WITH-YOUR-WORKER.workers.dev"}\"")
+    }
+    buildFeatures {
+        buildConfig = true
     }
 }

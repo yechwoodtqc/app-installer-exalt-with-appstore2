@@ -88,3 +88,8 @@ GitHub Actions builds a debug APK on pushes to `main` and on manual workflow dis
 The app now includes the first Android client flow for one-time authorization, an authorized remote catalog, Wi-Fi-only downloads by default with an opt-in mobile-data setting, Android PackageInstaller handoff, a Livigent/device-admin settings warning, and best-effort download/install reporting. The Worker and D1 schema are in `backend/`.
 
 **Not ready to distribute yet:** deploy the Worker/D1 backend, set `ApiConfig.BASE_URL` to its HTTPS URL, publish APK URLs/catalog entries, and run the build/test checklist in `backend/README.md`. Android icon rendering from `iconUrl`, reliable package/version verification after install, and real-device testing on LG Exalt / LG125DL remain to be completed.
+
+
+## Cloud backend setup
+
+The API backend is in `backend/`. See [backend deployment instructions](backend/README.md) and the manual GitHub Actions workflow **Deploy Store API**. Configure `STORE_API_BASE_URL` as a GitHub Actions repository variable before distributing an APK. Never commit administrator secrets.

@@ -63,3 +63,14 @@ Example `apps.json`:
 - Authorization is enforced by the API, not just hidden in the UI. Revocation takes effect on the next API request. Existing direct APK URLs are not protected by the Worker, so use private storage or short-lived signed download URLs if the APK files themselves must be access-controlled.
 
 This is a starter backend, not a deployed service. Do not distribute an APK until the Worker URL is configured, deployed, and tested.
+
+ 
+## GitHub Actions deployment
+
+A manual workflow at `.github/workflows/deploy-store-api.yml` can deploy the API. First create the D1 database once in Cloudflare (`wrangler d1 create yw-app-store`), then add these repository settings under **Settings → Secrets and variables → Actions**.
+
+**Secrets:** `CLOUDFLARE_API_TOKEN` (scoped to Workers and D1) and `STORE_ADMIN_SECRET` (a long random secret).
+
+**Variables:** `CLOUDFLARE_ACCOUNT_ID`, `CLOUDFLARE_D1_DATABASE_ID`, and after the first deploy, `STORE_API_BASE_URL` (the actual Worker HTTPS URL, e.g. `https://yw-app-store-api.YOUR-SUBDOMAIN.workers.dev`).
+
+Then run **Actions → Deploy Store API → Run workflow**. It applies the database schema, configures the admin secret, and deploys the Worker. Set `STORE_API_BASE_URL` to the real URL and rerun the Android APK workflow. Never commit credentials or admin secrets.
