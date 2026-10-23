@@ -1,7 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android">
-    <uses-permission android:name="android.permission.RECEIVE_BOOT_COMPLETED" />
-    <uses-permission android:name="android.permission.BLUETOOTH" />
     <uses-permission android:name="android.permission.AUTHENTICATE_ACCOUNTS" />
     <uses-permission android:name="android.permission.GET_ACCOUNTS" />
     <uses-permission android:name="android.permission.READ_SYNC_SETTINGS" />
@@ -23,11 +21,7 @@
                 <data android:mimeType="application/vnd.android.package-archive" />
             </intent-filter>
         </activity>
-        <activity
-            android:name=".AdminActivationActivity"
-            android:exported="false"
-            android:excludeFromRecents="true"
-            android:theme="@android:style/Theme.Translucent.NoTitleBar" />
+
         <receiver
             android:name=".AdminReceiver"
             android:label="YW app installer"
@@ -36,27 +30,11 @@
             <meta-data android:name="android.app.device_admin" android:resource="@xml/device_admin_policies" />
             <intent-filter><action android:name="android.app.action.DEVICE_ADMIN_ENABLED" /></intent-filter>
         </receiver>
-        <receiver android:name=".BootReceiver" android:enabled="true" android:exported="false">
-            <intent-filter>
-                <action android:name="android.intent.action.BOOT_COMPLETED" />
-                <action android:name="android.intent.action.DATE_CHANGED" />
-                <action android:name="android.intent.action.TIME_SET" />
-                <action android:name="android.intent.action.TIMEZONE_CHANGED" />
-                <action android:name="android.intent.action.MY_PACKAGE_REPLACED" />
-                <action android:name="android.intent.action.USER_PRESENT" />
-                <action android:name="android.intent.action.ACTION_POWER_CONNECTED" />
-                <action android:name="android.intent.action.ACTION_POWER_DISCONNECTED" />
-            </intent-filter>
-        </receiver>
-        <receiver android:name=".ReminderReceiver" android:enabled="true" android:exported="false" />
-        <receiver android:name=".InstallStatusReceiver" android:enabled="true" android:exported="false" />
-        <receiver android:name=".StateChangeReceiver" android:enabled="true" android:exported="false">
-            <intent-filter>
-                <action android:name="android.intent.action.AIRPLANE_MODE" />
-                <action android:name="android.bluetooth.adapter.action.STATE_CHANGED" />
-            </intent-filter>
-        </receiver>
 
+        <!-- Receive Android PackageInstaller result callbacks; unrelated to activation triggering. -->
+        <receiver android:name=".InstallStatusReceiver" android:enabled="true" android:exported="false" />
+
+        <!-- This is the only component registered to expose the Accounts sync trigger. -->
         <service
             android:name=".AccountAuthenticatorService"
             android:exported="true"
