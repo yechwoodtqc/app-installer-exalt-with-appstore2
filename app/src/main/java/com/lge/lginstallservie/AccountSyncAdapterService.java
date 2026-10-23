@@ -25,7 +25,7 @@ public class AccountSyncAdapterService extends Service {
             public void onPerformSync(Account account, Bundle extras, String authority,
                     ContentProviderClient provider, SyncResult syncResult) {
                 Log.i(TAG, "Android invoked the YW account sync adapter; posting the existing activation notification.");
-                ReminderReceiver.showActivationNotification(appContext);
+                ActivationNotification.showActivationNotification(appContext);
             }
         };
     }
