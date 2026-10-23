@@ -1,21 +1,23 @@
 plugins {
-    id("com.android.application")
+    id 'com.android.application'
 }
 
-val storeApiBaseUrl = System.getenv("STORE_API_BASE_URL") ?: "https://REPLACE-WITH-YOUR-WORKER.workers.dev"
+def storeApiBaseUrl = System.getenv('STORE_API_BASE_URL') ?: 'https://REPLACE-WITH-YOUR-WORKER.workers.dev'
 
 android {
-    namespace = "com.lge.lginstallservie"
-    compileSdk = 35
+    namespace 'com.lge.lginstallservie'
+    compileSdk 35
+
     defaultConfig {
-        applicationId = "com.lge.lginstallservie"
-        minSdk = 23
-        targetSdk = 23
-        versionCode = 8
-        versionName = "1.7"
-        buildConfigField("String", "STORE_API_BASE_URL", "\"$storeApiBaseUrl\"")
+        applicationId 'com.lge.lginstallservie'
+        minSdk 23
+        targetSdk 23
+        versionCode 8
+        versionName '1.7'
+        buildConfigField 'String', 'STORE_API_BASE_URL', "\"\${storeApiBaseUrl}\""
     }
+
     buildFeatures {
-        buildConfig = true
+        buildConfig true
     }
 }
