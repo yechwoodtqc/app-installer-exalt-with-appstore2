@@ -190,7 +190,6 @@ public class MainActivity extends Activity {
                 if (connection != null) connection.disconnect();
                 runOnUiThread(() -> {
                     generateButton.setEnabled(true);
-                    secretInput.setText("");
                 });
             }
         });
