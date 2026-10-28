@@ -93,3 +93,12 @@ The app now includes the first Android client flow for one-time authorization, a
 ## Cloud backend setup
 
 The API backend is in `backend/`. See [backend deployment instructions](backend/README.md) and the manual GitHub Actions workflow **Deploy Store API**. Configure `STORE_API_BASE_URL` as a GitHub Actions repository variable before distributing an APK. Never commit administrator secrets.
+
+## Publish apps to the store catalog
+
+Catalog entries are maintained in `catalog/apps.json`. To add or update an app, add an entry with a unique `id`, display name, version, package name, and HTTPS APK URL.
+
+After the Store API has been deployed with the current `backend/worker.js`, configure the repository variable `STORE_API_BASE_URL` and the repository secret `STORE_ADMIN_SECRET`. Then run **Actions → Publish Store Catalog → Run workflow**. The workflow upserts each entry individually, so it does not delete apps already in the catalog.
+
+The YW Launcher entry points to the latest APK release at [YWLauncher releases](https://github.com/yechwoodtqc/YWLauncher/releases/tag/latest).
+
