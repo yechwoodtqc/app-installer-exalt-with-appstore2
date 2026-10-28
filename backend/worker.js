@@ -94,6 +94,21 @@ export default {
         await env.DB.batch(statements);
         return json({ ok: true, count: input.apps.length });
       }
+      if (request.method === "POST" && url.pathname === "/admin/apps/upsert") {
+        const app = await bodyJson(request);
+        const id = String(app?.id || "");
+        const name = String(app?.name || "");
+        const version = String(app?.version || "");
+        const apkUrl = String(app?.apkUrl || "");
+        const packageName = String(app?.packageName || "");
+        if (!id || id.length > 100 || !name || !version || !apkUrl.startsWith("https://") || !/^[A-Za-z0-9_.]{3,200}$/.test(packageName)) {
+          return json({ error: "App needs id, name, version, packageName, and an HTTPS apkUrl." }, 400);
+        }
+        await env.DB.prepare(
+          "INSERT INTO apps (id, name, description, version, size_bytes, package_name, apk_url, icon_url, enabled) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?) ON CONFLICT(id) DO UPDATE SET name=excluded.name, description=excluded.description, version=excluded.version, size_bytes=excluded.size_bytes, package_name=excluded.package_name, apk_url=excluded.apk_url, icon_url=excluded.icon_url, enabled=excluded.enabled"
+        ).bind(id, name, String(app.description || ""), version, Math.max(0, Number(app.sizeBytes) || 0), packageName, apkUrl, String(app.iconUrl || ""), app.enabled === false ? 0 : 1).run();
+        return json({ ok: true, id });
+      }
       if (request.method === "GET" && url.pathname === "/admin/stats") {
         const [devices, reports, codes] = await Promise.all([
           env.DB.prepare("SELECT COUNT(*) AS total FROM devices WHERE revoked_at IS NULL").first(),
