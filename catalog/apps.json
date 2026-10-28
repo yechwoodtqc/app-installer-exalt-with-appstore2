@@ -1,0 +1,15 @@
+{
+  "apps": [
+    {
+      "id": "ywlauncher",
+      "name": "YW Launcher",
+      "description": "Launcher and weather app for compatible Android devices.",
+      "version": "1.0.0",
+      "sizeBytes": 83276,
+      "packageName": "com.lge.ywlauncher",
+      "apkUrl": "https://github.com/yechwoodtqc/YWLauncher/releases/download/latest/app-debug.apk",
+      "iconUrl": "",
+      "enabled": true
+    }
+  ]
+}
